@@ -6,6 +6,7 @@ namespace EULS.Utility
     public class PDF
     {
         readonly List<Timetable> timetables = new();
+
         public async Task<List<Timetable>> GeneratePDF(string[] pdfs) {
             // For each subject source path in the list.
             foreach (string url in pdfs) {
@@ -17,23 +18,29 @@ namespace EULS.Utility
                     HtmlDocument htmlDocument = new();
                     htmlDocument.LoadHtml(html);
 
-                    // Obtain all useful information.
-                    var subject = htmlDocument.DocumentNode.SelectNodes("//event//resources//module")[0].InnerText;
-                    var lecturer = htmlDocument.DocumentNode.SelectNodes("//event//resources//staff")[0].InnerText;
-                    var venue = htmlDocument.DocumentNode.SelectNodes("//event//resources//room")[0].InnerText;
-                    var day = htmlDocument.DocumentNode.SelectNodes("//event//day")[0].InnerText;
-                    var start = htmlDocument.DocumentNode.SelectNodes("//event//starttime")[0].InnerText;
-                    var end = htmlDocument.DocumentNode.SelectNodes("//event//endtime")[0].InnerText;
+                    // Get the event count.
+                    var events = htmlDocument.DocumentNode.SelectNodes("//event").Count;
 
-                    // Create new Timetable object, and assign each properties with the corresponding information.
-                    timetables.Add(new Timetable {
-                        Subject = subject,
-                        Lecturer = lecturer,
-                        Venue = venue,
-                        Day = day,
-                        Start = start,
-                        End = end
-                    });
+                    for (var index = 0; index < events; index++) {
+                        // Obtain all useful information.
+                        var subject = htmlDocument.DocumentNode.SelectNodes("//event//resources//module")[index].InnerText;
+                        var lecturer = htmlDocument.DocumentNode.SelectNodes("//event//resources//staff")[index].InnerText;
+                        var venue = htmlDocument.DocumentNode.SelectNodes("//event//resources//room")[index].InnerText;
+                        var day = htmlDocument.DocumentNode.SelectNodes("//event//day")[index].InnerText;
+                        var start = htmlDocument.DocumentNode.SelectNodes("//event//starttime")[index].InnerText;
+                        var end = htmlDocument.DocumentNode.SelectNodes("//event//endtime")[index].InnerText;
+
+                        // Create new Timetable object, and assign each properties with the corresponding information.
+                        timetables.Add(new Timetable
+                        {
+                            Subject = subject,
+                            Lecturer = lecturer,
+                            Venue = venue,
+                            Day = day,
+                            Start = start,
+                            End = end
+                        });
+                    }
                 }
                 catch (Exception) {
                     // If the HTML content retrieval failed.
@@ -42,6 +49,7 @@ namespace EULS.Utility
 
             return timetables;
         }
+
         public async Task<string> GetHTMLContent(string url) {
             using HttpClient client = new();
 
