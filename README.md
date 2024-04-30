@@ -2,7 +2,7 @@
 
 - This endpoint requests HTML content (via web scraping) from the official campus website.
 - It filters all `<option>` tags, extracting their `value` properties (containing specific subject URLs in XML format) and their inner text (subject title).
-- The extracted values are mapped into the "Subject" model and appended to the list of subjects (`List<Subject>`) before being sent as a response to this endpoint.
+- The extracted values are mapped into the "Subject" model and appended to the list of subjects (`List<Subject>`) before being sent as a response from this endpoint.
 
 ## /api/pdf
 
