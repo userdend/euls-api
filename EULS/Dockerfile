@@ -1,16 +1,14 @@
-# Use the official .NET runtime image
-FROM mcr.microsoft.com/dotnet/asp:7.0 AS base
+# Building the application.
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
-
-# Use the official .NET SDK image for building
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY . .
+COPY *.csproj ./
 RUN dotnet restore
-RUN dotnet publish -c Release -o app
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-# Final stage
-FROM base AS final
+# Running the application.
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
-COPY --from=build /app .
+COPY --from=build /app/out/ .
+EXPOSE 5000
 ENTRYPOINT ["dotnet", "EULS.dll"]
