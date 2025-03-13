@@ -5,7 +5,7 @@ namespace EULS.Utility
 {
     public class Util
     {
-        readonly string[] urls = { "https://jadual.ums.edu.my/KuliahKK/mindex.html", "https://jadual.ums.edu.my/KuliahKKNextSem/mindex.html" };
+        private static readonly string[] urls = EnvLoader.GetJadualUrls();
         readonly List<Subject> subjects = new();
 
         public async Task<List<Subject>> GetSubjects() {

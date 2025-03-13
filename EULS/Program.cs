@@ -1,9 +1,12 @@
 using EULS.Model;
 using EULS.Utility;
-using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
 
+// Load .env files.
+EnvLoader.Load();
+
+// Initializes a new instance of the WebApplicationbuilder class with preconfigured defaults.
 var builder = WebApplication.CreateBuilder(args);
 
 // Enable CORS.
@@ -14,7 +17,6 @@ builder.Services.AddCors(options => {
 });
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
